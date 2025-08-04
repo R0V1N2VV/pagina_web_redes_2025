@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capas de la Tierra</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Epocas de la tierra</h1>
+    <p>Haz clic en cada capa para ver su información.</p>
+</header>
+
+<main>
+    <div class="info" id="info"></div>
+</main>
+
+<footer>
+    <div class="earth">
+        <div class="layer troposfera" onclick="showInfo('troposfera')"></div>
+        <div class="layer estratosfera" onclick="showInfo('estratosfera')"></div>
+        <div class="layer mesosfera" onclick="showInfo('mesosfera')"></div>
+        <div class="layer termosfera" onclick="showInfo('termosfera')"></div>
+        <div class="layer exosfera" onclick="showInfo('exosfera')"></div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
