@@ -1,421 +1,126 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tienda Jurásica | Parque Jurásico</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --jp-red:#c61b1b;
-      --jp-gold:#f3c84e;
-      --jp-dark:#0f1410;
-      --jp-green:#1f3d26;
-      --jp-cream:#fff7e3;
-      --shadow:0 10px 30px rgba(0,0,0,.2);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif; color:#111;
-      background:radial-gradient(1200px 600px at 80% -10%, rgba(198,27,27,.15), transparent 60%),
-                 radial-gradient(800px 400px at 20% -10%, rgba(31,61,38,.18), transparent 60%),
-                 linear-gradient(180deg, #101512, #0c100e 40%, #0a0d0b);
-      background-attachment: fixed;
-    }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:1150px; margin:0 auto; padding:0 16px}
-
-    /* Header */
-    header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:saturate(1.1) blur(8px);
-      background:linear-gradient(180deg, rgba(10,13,11,.9), rgba(10,13,11,.6));
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0}
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{
-      width:48px; height:48px; border-radius:50%; position:relative; flex:0 0 auto; box-shadow: var(--shadow);
-      background:radial-gradient(circle at 30% 30%, #ffd166, #f3c84e 35%, #c61b1b 36%, #c61b1b 80%, #7a0f0f 100%);
-      border:3px solid #111;
-    }
-    .logo svg{position:absolute; inset:0; filter: drop-shadow(0 2px 1px rgba(0,0,0,.4))}
-    .brand h1{font-size:18px; color:#fef2cc; letter-spacing:.5px; margin:0}
-    .tagline{font-size:12px; color:#d1e9c6; opacity:.85}
-
-    .actions{display:flex; align-items:center; gap:10px}
-    .btn{padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.08); cursor:pointer;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); color:#f6f6f6;
-      transition:.2s transform,.2s box-shadow,.2s background;
-    }
-    .btn:hover{transform:translateY(-1px); box-shadow:0 10px 20px rgba(0,0,0,.25)}
-    .btn.badge{position:relative}
-    .btn.badge span{position:absolute; top:-6px; right:-6px; background:var(--jp-red); color:#fff;
-      font-size:11px; line-height:1; padding:4px 6px; border-radius:10px; border:2px solid #111; min-width:18px; text-align:center}
-
-    /* Hero */
-    .hero{position:relative; overflow:hidden; border-bottom:1px dashed rgba(243,200,78,.4)}
-    .hero .wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:20px; padding:28px 16px 26px}
-    .hero-card{
-      background:linear-gradient(180deg, rgba(255,247,227,.06), rgba(255,247,227,.02));
-      border:1px solid rgba(255,247,227,.12); border-radius:var(--radius); padding:22px; position:relative; box-shadow:var(--shadow);
-    }
-    .hero h2{margin:0 0 6px; font-size:28px; color:#fff4c7}
-    .hero p{margin:0; color:#dbead7}
-    .seal{display:flex; align-items:center; gap:10px; margin-top:14px; color:#ffe8a3}
-    .seal small{opacity:.8}
-
-    .pass{
-      background:linear-gradient(135deg, rgba(243,200,78,.18), rgba(198,27,27,.15));
-      border:1px solid rgba(243,200,78,.25); border-radius:var(--radius); padding:18px; color:#ffeec2;
-      display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow)
-    }
-    .pass .title{font-weight:800; font-size:20px}
-    .pass .meta{font-size:12px; opacity:.9}
-    .pass .claim{display:flex; gap:10px}
-    .pass input{flex:1; padding:10px 12px; border-radius:12px; border:none; outline:none; background:rgba(255,255,255,.08); color:#fff}
-    .pass button{white-space:nowrap}
-
-    /* Controls */
-    .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:16px 0}
-    .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); color:#e8f5e5; cursor:pointer; font-size:13px}
-    .chip.active{background:rgba(243,200,78,.2); border-color:rgba(243,200,78,.5); color:#fff4c7}
-    .search{margin-left:auto; display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); padding:8px 10px; border-radius:12px}
-    .search input{background:transparent; border:none; outline:none; color:#fff; width:220px}
-
-    /* Grid */
-    .grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:14px}
-    @media (max-width:1000px){.hero .wrap{grid-template-columns:1fr} .grid{grid-template-columns:repeat(2, 1fr)} .search input{width:160px}}
-    @media (max-width:560px){.grid{grid-template-columns:1fr}}
-
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.1); border-radius:16px; overflow:hidden; position:relative; box-shadow:var(--shadow);
-      display:flex; flex-direction:column; min-height:320px
-    }
-    .img{
-      position:relative; height:180px; overflow:hidden; background:radial-gradient(150px 60px at 70% 10%, rgba(243,200,78,.25), transparent 60%),
-                 radial-gradient(220px 120px at 20% 0%, rgba(198,27,27,.2), transparent 60%),
-                 linear-gradient(180deg, #132219, #0d1711);
-    }
-    .img svg{position:absolute; inset:auto 0 0 0; height:120%; opacity:.9; transform:translateY(10px)}
-    .badge-top{position:absolute; top:10px; left:10px; font-size:12px; background:rgba(243,200,78,.2); color:#fff4c7; padding:6px 8px; border-radius:10px; border:1px solid rgba(243,200,78,.4)}
-    .content{padding:14px; display:flex; flex-direction:column; gap:8px; flex:1}
-    .title{font-weight:700; color:#fff; font-size:16px}
-    .desc{color:#e5f1e3; font-size:13px; opacity:.9}
-    .price{display:flex; align-items:baseline; gap:6px; margin-top:auto}
-    .price b{color:#ffe59b; font-size:18px}
-    .price s{color:#c1d7bf; font-size:12px; opacity:.7}
-    .buy{display:flex; gap:8px}
-    .buy .btn{flex:1}
-
-    /* Cart Drawer */
-    .drawer{position:fixed; right:-420px; top:0; width:360px; height:100%; background:#0c110e; box-shadow: -20px 0 50px rgba(0,0,0,.35);
-      border-left:1px solid rgba(255,255,255,.08); transition:.3s right; z-index:60; display:flex; flex-direction:column}
-    .drawer.open{right:0}
-    .drawer header{position:sticky; top:0; background:#0c110e; border-bottom:1px solid rgba(255,255,255,.08)}
-    .drawer h3{margin:0; padding:16px; color:#fff4c7}
-    .cart-items{flex:1; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:10px}
-    .cart-item{display:grid; grid-template-columns:48px 1fr auto; gap:10px; align-items:center; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:8px}
-    .cart-item .qty{display:flex; align-items:center; gap:6px}
-    .cart-item button{padding:6px 10px}
-    .cart-footer{border-top:1px solid rgba(255,255,255,.08); padding:12px; display:flex; flex-direction:column; gap:10px}
-    .total{display:flex; justify-content:space-between; color:#fff; font-weight:700}
-
-    /* Toast */
-    .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); opacity:0; transition:.3s; background:#0f1410;
-      border:1px solid rgba(243,200,78,.4); color:#fff4c7; padding:10px 14px; border-radius:12px; box-shadow:var(--shadow); z-index:80}
-    .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
-
-    /* Footer */
-    footer{margin:30px 0 60px; color:#cfe7cb; opacity:.85}
-
-    /* Little motion */
-    @keyframes sway{0%{transform:translateY(0)}50%{transform:translateY(6px)}100%{transform:translateY(0)}}
-    .img svg{animation:sway 5s ease-in-out infinite}
-  </style>
+  <meta charset="UTF-8">
+  <title>Tienda Jurásica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand">
-        <div class="logo" aria-label="Logo Parque Jurásico">
-          <!-- Simple T-Rex head silhouette -->
-          <svg viewBox="0 0 100 100" aria-hidden="true">
-            <path d="M10 70 C 20 30, 70 20, 88 40 C 70 42, 60 50, 62 60 C 55 56, 46 56, 36 59 C 30 65, 24 70, 10 70 Z" fill="#191919"/>
-            <circle cx="67" cy="43" r="4" fill="#f3c84e"/>
-            <path d="M40 64 l6 4 l6 -4 l6 4 l6 -4" stroke="#f3c84e" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-        <div>
-          <h1>Parque Jurásico – Tienda</h1>
-          <div class="tagline">Mercadería oficial del parque</div>
-        </div>
-      </div>
-      <div class="actions">
-          <button class="btn" id="btn-pass">Dinosaurios</button>
-        <button class="btn" id="btn-pass">Pase de visitante</button>
-        <button class="btn badge" id="btn-cart">Carrito <span id="cart-count">0</span></button>
-      </div>
-    </div>
-  </header>
+<body class="bg-gray-900 text-gray-100">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-8 text-center">Tienda Parque Jurásico</h1>
 
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-card">
-        <h2>¡Bienvenido/a a la tienda del Parque!</h2>
-        <p>Encuentra camisetas, juguetes, mapas, tazas y más. Envíos a todo el mundo (si el T‑Rex lo permite).
-        </p>
-        <div class="seal">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" stroke="rgba(243,200,78,.9)" stroke-width="2"/>
-            <path d="M7 13l3 3 7-7" stroke="rgba(243,200,78,.9)" stroke-width="2" fill="none"/>
-          </svg>
-          <small>Producto licenciado por InGen.</small>
-        </div>
-      </div>
-      <div class="pass" id="pass-box" aria-live="polite">
-        <div class="title">Pase de Visitante</div>
-        <div class="meta">10% OFF en tu primera compra. Ingresa tu email:</div>
-        <div class="claim">
-          <input id="email" type="email" placeholder="tu@email.com" />
-          <button class="btn" id="claim">Reclamar</button>
-        </div>
-        <small class="meta">* Se aplicará en el checkout. No válido en carnada para Velociraptor.</small>
-      </div>
-    </div>
-  </section>
-
-  <main class="wrap">
-    <div class="controls">
-      <div class="chip active" data-filter="all">Todo</div>
-      <div class="chip" data-filter="ropa">Ropa</div>
-      <div class="chip" data-filter="juguetes">Juguetes</div>
-      <div class="chip" data-filter="hogar">Hogar</div>
-      <div class="chip" data-filter="coleccion">Colección</div>
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" stroke="#e7f2e5"/>
-          <path d="M20 20l-3.5-3.5" stroke="#e7f2e5"/>
-        </svg>
-        <input id="search" placeholder="Buscar… (camiseta, taza, mapa)" />
-      </div>
+    <!-- Filtros -->
+    <div class="flex flex-wrap gap-2 justify-center mb-6">
+      <button class="filtro bg-green-600 text-white px-4 py-2 rounded-2xl" data-cat="all">Todos</button>
+      <button class="filtro bg-gray-700 text-gray-200 px-4 py-2 rounded-2xl" data-cat="ropa">Ropa</button>
+      <button class="filtro bg-gray-700 text-gray-200 px-4 py-2 rounded-2xl" data-cat="hogar">Hogar & Snacks</button>
+      <button class="filtro bg-gray-700 text-gray-200 px-4 py-2 rounded-2xl" data-cat="juguetes">Juguetes</button>
+      <button class="filtro bg-gray-700 text-gray-200 px-4 py-2 rounded-2xl" data-cat="coleccion">Colección & Experiencias</button>
     </div>
 
-    <section class="grid" id="grid"></section>
-  </main>
-
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <header><h3 class="wrap">Tu carrito</h3></header>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-footer">
-      <div class="total"><span>Total</span> <span id="total">$0</span></div>
-      <button class="btn" id="checkout">Ir a pagar</button>
+    <!-- Buscador -->
+    <div class="flex justify-center mb-8">
+      <input id="buscar" type="text" placeholder="Buscar..." 
+        class="bg-gray-800 border border-gray-600 rounded-2xl px-4 py-2 w-1/2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-600">
     </div>
-  </aside>
 
-  <div class="toast" id="toast"></div>
+    <!-- Grilla de productos -->
+    <div id="productos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
 
-  <footer class="wrap">
-    <small>© 1993–2025 Parque Jurásico. InGen™. Isla Nublar. — Atención al visitante: sector de bienvenida, horario 09–18 hs.</small>
-  </footer>
+    <!-- Carrito -->
+    <div class="mt-12 p-6 bg-gray-800 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Carrito</h2>
+      <ul id="carrito" class="space-y-2"></ul>
+      <p class="mt-4 font-bold">Total: $<span id="total">0</span></p>
+    </div>
+  </div>
 
   <script>
-    // Datos de ejemplo (podés editar o agregar más)
     const productos = [
-      {id:1, titulo:'Camiseta Logo Clásico', cat:'ropa', precio:14990, antes:18990, badge:'Nuevo', desc:'Algodón premium, edición Parque.', svg:'rex'},
-      {id:2, titulo:'Gorra InGen', cat:'ropa', precio:11990, antes:null, badge:'', desc:'Visera curva, ajustable.', svg:'id'},
-      {id:3, titulo:'Mug T‑Rex', cat:'hogar', precio:9990, antes:12990, badge:'-20%', desc:'Cerámica 350ml, apto microondas.', svg:'mug'},
-      {id:4, titulo:'Mapa Isla Nublar (Póster)', cat:'coleccion', precio:13990, antes:null, badge:'Ed. limitada', desc:'Tamaño A2, papel texturizado.', svg:'map'},
-      {id:5, titulo:'Kit Dino (Velociraptor)', cat:'juguetes', precio:16990, antes:19990, badge:'Top ventas', desc:'Arma y pinta tu raptor.', svg:'raptor'},
-      {id:6, titulo:'Sudadera Staff', cat:'ropa', precio:24990, antes:28990, badge:'', desc:'Con capucha y bolsillo canguro.', svg:'badge'},
-      {id:7, titulo:'Llavero Hueso Fosil', cat:'hogar', precio:4990, antes:null, badge:'', desc:'Metal envejecido.', svg:'bone'},
-      {id:8, titulo:'Placa de Identificación', cat:'coleccion', precio:8990, antes:10990, badge:'Nuevo', desc:'Personalizable con tu nombre.', svg:'id'},
-      {id:9, titulo:'Peluche Triceratops', cat:'juguetes', precio:13990, antes:null, badge:'Suave', desc:'Ultra soft 30 cm.', svg:'tri'},
-      {id:10, titulo:'Termo “No hay de qué preocuparse”', cat:'hogar', precio:15990, antes:17990, badge:'', desc:'Acero 500 ml.', svg:'thermo'},
-      {id:11, titulo:'Pins del Parque (x3)', cat:'coleccion', precio:6990, antes:null, badge:'', desc:'Logo, Rex y Jeep.', svg:'pins'},
-      {id:12, titulo:'Capa para Lluvia (Jeep Tour)', cat:'ropa', precio:10990, antes:12990, badge:'', desc:'Impermeable ligera.', svg:'rain'}
+      {id:1, titulo:'Camiseta Logo Clásico', cat:'ropa', precio:14990, antes:18990, badge:'Nuevo', desc:'Algodón premium, edición Parque.'},
+      {id:2, titulo:'Gorra InGen', cat:'ropa', precio:11990, antes:null, badge:'', desc:'Visera curva, ajustable.'},
+      {id:3, titulo:'Mug T-Rex', cat:'hogar', precio:9990, antes:12990, badge:'-20%', desc:'Cerámica 350ml, apto microondas.'},
+      {id:4, titulo:'Mapa Isla Nublar (Póster)', cat:'coleccion', precio:13990, antes:null, badge:'Ed. limitada', desc:'Tamaño A2, papel texturizado.'},
+      {id:5, titulo:'Kit Dino (Velociraptor)', cat:'juguetes', precio:16990, antes:19990, badge:'Top ventas', desc:'Arma y pinta tu raptor.'},
+      {id:6, titulo:'Sudadera Staff', cat:'ropa', precio:24990, antes:28990, badge:'', desc:'Con capucha y bolsillo canguro.'},
+      {id:7, titulo:'Llavero Hueso Fosil', cat:'hogar', precio:4990, antes:null, badge:'', desc:'Metal envejecido.'},
+      {id:8, titulo:'Placa de Identificación', cat:'coleccion', precio:8990, antes:10990, badge:'Nuevo', desc:'Personalizable con tu nombre.'},
+      {id:9, titulo:'Peluche Triceratops', cat:'juguetes', precio:13990, antes:null, badge:'Suave', desc:'Ultra soft 30 cm.'},
+      {id:10, titulo:'Termo “No hay de qué preocuparse”', cat:'hogar', precio:15990, antes:17990, badge:'', desc:'Acero 500 ml.'},
+      {id:11, titulo:'Pins del Parque (x3)', cat:'coleccion', precio:6990, antes:null, badge:'', desc:'Logo, Rex y Jeep.'},
+      {id:12, titulo:'Capa para Lluvia (Jeep Tour)', cat:'ropa', precio:10990, antes:12990, badge:'', desc:'Impermeable ligera.'},
+      {id:13, titulo:'Entrada General Adulto', cat:'coleccion', precio:15000, antes:null, badge:'', desc:'Acceso completo al parque, 1 día.'},
+      {id:14, titulo:'Entrada Infantil', cat:'coleccion', precio:8000, antes:null, badge:'', desc:'Para visitantes menores de 12 años.'},
+      {id:15, titulo:'Pase VIP Jeep Tour', cat:'coleccion', precio:30000, antes:35000, badge:'Exclusivo', desc:'Tour en jeep con guía experto.'},
+      {id:16, titulo:'Hamburguesa Brontosaurio', cat:'hogar', precio:3500, antes:null, badge:'Snack', desc:'Combo jurásico en el Raptor Café.'},
+      {id:17, titulo:'Helado “Volcán”', cat:'hogar', precio:2000, antes:null, badge:'Nuevo', desc:'Helado temático con salsa de lava.'},
+      {id:18, titulo:'Souvenir Diente de Dino', cat:'coleccion', precio:5500, antes:null, badge:'Replica', desc:'Colmillo de T-Rex (réplica).'},
+      {id:19, titulo:'Figura de T-Rex', cat:'juguetes', precio:7000, antes:8500, badge:'Top ventas', desc:'Figura articulada 20 cm.'},
+      {id:20, titulo:'Foto con T-Rex Animatrónico', cat:'coleccion', precio:2500, antes:null, badge:'', desc:'Recuerdo fotográfico oficial.'}
     ];
 
-    const grid = document.getElementById('grid');
-    const chips = document.querySelectorAll('.chip');
-    const search = document.getElementById('search');
-    const cartBtn = document.getElementById('btn-cart');
-    const drawer = document.getElementById('drawer');
-    const cartItems = document.getElementById('cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const totalEl = document.getElementById('total');
-    const toast = document.getElementById('toast');
+    let carrito = [];
 
-    let filtro = 'all';
-    let query = '';
-    const cart = new Map(); // id -> {qty, prod}
-
-    function iconSVG(key){
-      const icons = {
-        rex:`<svg viewBox='0 0 180 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M12 90 C 32 22, 120 10, 166 40 C 130 44, 112 60, 116 80 C 98 72, 78 72, 58 78 C 46 88, 34 96, 12 90 Z' fill='#1a1a1a'/>
-          <circle cx='124' cy='46' r='6' fill='var(--jp-gold)'/>
-        </svg>`,
-        id:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <rect x='20' y='20' width='160' height='80' rx='10' fill='#16231a' stroke='rgba(243,200,78,.5)'/>
-          <circle cx='60' cy='60' r='18' fill='#243b2a'/>
-          <rect x='90' y='40' width='70' height='10' fill='#243b2a'/>
-          <rect x='90' y='60' width='50' height='10' fill='#243b2a'/>
-        </svg>`,
-        mug:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <rect x='40' y='30' width='90' height='60' rx='10' fill='#18281f'/>
-          <path d='M130 40 q30 10 0 40' stroke='#243b2a' stroke-width='8' fill='none'/>
-        </svg>`,
-        map:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M40 30 l40 -10 l40 10 l40 -10 l0 70 l-40 10 l-40 -10 l-40 10 z' fill='#16231a' stroke='rgba(243,200,78,.5)'/>
-          <path d='M60 46 l30 -8 l30 8 l30 -8' stroke='#243b2a' fill='none'/>
-        </svg>`,
-        raptor:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M20 80 C 40 40, 100 30, 170 50 C 140 52, 130 60, 132 72 C 110 66, 86 66, 64 74 C 50 84, 40 90, 20 80 Z' fill='#1b1b1b'/>
-        </svg>`,
-        badge:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <circle cx='100' cy='60' r='30' fill='#16231a' stroke='rgba(243,200,78,.6)'/>
-          <path d='M85 60 l10 10 l20 -20' stroke='rgba(243,200,78,.9)' stroke-width='6' fill='none'/>
-        </svg>`,
-        bone:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M40 70 q10 -20 30 -10 q20 10 40 0 q20 -10 30 10 q-10 20 -30 10 q-20 -10 -40 0 q-20 10 -30 -10z' fill='#17261d'/>
-        </svg>`,
-        tri:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M40 80 l30 -20 l40 0 l30 20 z' fill='#18281f'/>
-          <circle cx='68' cy='60' r='6' fill='#243b2a'/>
-        </svg>`,
-        thermo:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <rect x='90' y='20' width='20' height='70' rx='10' fill='#18281f'/>
-          <circle cx='100' cy='95' r='12' fill='#243b2a'/>
-        </svg>`,
-        pins:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <circle cx='70' cy='60' r='18' fill='#16231a' stroke='rgba(243,200,78,.6)'/>
-          <circle cx='100' cy='60' r='18' fill='#16231a' stroke='rgba(243,200,78,.6)'/>
-          <circle cx='130' cy='60' r='18' fill='#16231a' stroke='rgba(243,200,78,.6)'/>
-        </svg>`,
-        rain:`<svg viewBox='0 0 200 120' preserveAspectRatio='xMidYMax slice'>
-          <path d='M60 40 h80 v50 h-80 z' fill='#16231a'/>
-          <path d='M70 95 l-5 10 M90 95 l-5 10 M110 95 l-5 10 M130 95 l-5 10' stroke='#243b2a' stroke-width='4'/>
-        </svg>`
-      };
-      return icons[key] || icons['rex'];
-    }
-
-    function formato(n){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(n)}
-
-    function render(){
-      grid.innerHTML = '';
-      const q = query.trim().toLowerCase();
-      const lista = productos.filter(p => (filtro==='all' || p.cat===filtro) && (!q || (p.titulo+" "+p.desc).toLowerCase().includes(q)));
-      if(!lista.length){
-        grid.innerHTML = `<div class="card" style="grid-column:1/-1;align-items:center;justify-content:center;padding:40px; min-height:180px">
-          <div class="title">No se encontraron productos.</div>
-          <div class="desc">Probá otra categoría o búsqueda.</div>
-        </div>`; return;
-      }
-      for(const p of lista){
-        const el = document.createElement('article');
-        el.className = 'card';
-        el.innerHTML = `
-          <div class='img'>${iconSVG(p.svg)} ${p.badge?`<div class='badge-top'>${p.badge}</div>`:''}</div>
-          <div class='content'>
-            <div class='title'>${p.titulo}</div>
-            <div class='desc'>${p.desc}</div>
-            <div class='price'>
-              <b>${formato(p.precio)}</b>
-              ${p.antes?`<s>${formato(p.antes)}</s>`:''}
-            </div>
-            <div class='buy'>
-              <button class='btn add' data-id='${p.id}'>Agregar</button>
-              <button class='btn ghost' onclick='verDetalle(${p.id})'>Ver</button>
-            </div>
-          </div>`;
-        grid.appendChild(el);
-      }
-      grid.querySelectorAll('.add').forEach(b=> b.addEventListener('click', ()=> addToCart(+b.dataset.id)));
-    }
-
-    function setFiltro(cat){
-      filtro = cat; chips.forEach(c=> c.classList.toggle('active', c.dataset.filter===cat)); render();
-    }
-
-    function addToCart(id){
-      const prod = productos.find(p=>p.id===id);
-      if(!prod) return;
-      const item = cart.get(id) || {qty:0, prod};
-      item.qty += 1; cart.set(id, item);
-      updateCart();
-      showToast(`${prod.titulo} agregado al carrito`);
-    }
-
-    function updateCart(){
-      cartItems.innerHTML = '';
-      let total = 0, count = 0;
-      cart.forEach(({qty, prod})=>{
-        total += qty*prod.precio; count += qty;
-        const row = document.createElement('div');
-        row.className='cart-item';
-        row.innerHTML = `
-          <div style='width:48px;height:48px;border-radius:10px;overflow:hidden;background:#142319;display:flex;align-items:center;justify-content:center'>
-            <div style='transform:scale(.35); width:100%; height:100%'>${iconSVG(prod.svg)}</div>
-          </div>
-          <div>
-            <div style='color:#fff'>${prod.titulo}</div>
-            <small style='color:#cfe7cb'>${formato(prod.precio)}</small>
-          </div>
-          <div class='qty'>
-            <button class='btn' aria-label='menos' onclick='cambiarQty(${prod.id}, -1)'>–</button>
-            <span style='color:#fff'>${qty}</span>
-            <button class='btn' aria-label='más' onclick='cambiarQty(${prod.id}, 1)'>+</button>
-          </div>`;
-        cartItems.appendChild(row);
+    function renderProductos(lista) {
+      const cont = document.getElementById('productos');
+      cont.innerHTML = '';
+      lista.forEach(p=>{
+        cont.innerHTML += `
+        <div class="bg-gray-800 p-5 rounded-2xl shadow-lg relative hover:scale-105 transition-transform">
+          ${p.badge?`<span class="absolute top-2 left-2 bg-green-600 text-xs px-2 py-1 rounded-2xl">${p.badge}</span>`:''}
+          <h3 class="font-bold text-lg mb-1">${p.titulo}</h3>
+          <p class="text-sm text-gray-400">${p.desc}</p>
+          <p class="mt-2 font-bold text-green-400">$${p.precio}${p.antes?` <span class="line-through text-gray-500">$${p.antes}</span>`:''}</p>
+          <button onclick="addCarrito(${p.id})" class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-2xl">Agregar</button>
+        </div>`;
       });
-      totalEl.textContent = formato(total);
-      cartCount.textContent = count;
     }
 
-    function cambiarQty(id, delta){
-      const item = cart.get(id); if(!item) return;
-      item.qty += delta; if(item.qty<=0) cart.delete(id); else cart.set(id,item);
-      updateCart();
+    function renderCarrito() {
+      const ul = document.getElementById('carrito');
+      ul.innerHTML = '';
+      let total = 0;
+      carrito.forEach((c,i)=>{
+        ul.innerHTML += `<li class="flex justify-between items-center bg-gray-700 px-3 py-2 rounded-2xl">
+          <span>${c.titulo} - $${c.precio}</span>
+          <button onclick="removeCarrito(${i})" class="text-red-400 hover:text-red-600 font-bold">x</button>
+        </li>`;
+        total += c.precio;
+      });
+      document.getElementById('total').textContent = total;
     }
 
-    function toggleDrawer(open){
-      drawer.classList.toggle('open', open); drawer.setAttribute('aria-hidden', String(!open));
+    function addCarrito(id){
+      const p = productos.find(pr=>pr.id===id);
+      carrito.push(p);
+      renderCarrito();
     }
 
-    function showToast(msg){
-      toast.textContent = msg; toast.classList.add('show');
-      clearTimeout(showToast.t); showToast.t = setTimeout(()=> toast.classList.remove('show'), 1800);
+    function removeCarrito(i){
+      carrito.splice(i,1);
+      renderCarrito();
     }
 
-    function verDetalle(id){
-      const p = productos.find(x=>x.id===id); if(!p) return;
-      alert(`${p.titulo}\n\n${p.desc}\nPrecio: ${formato(p.precio)}`);
-    }
-
-    // Eventos
-    chips.forEach(c=> c.addEventListener('click', ()=> setFiltro(c.dataset.filter)));
-    search.addEventListener('input', e=> {query = e.target.value; render()});
-    cartBtn.addEventListener('click', ()=> toggleDrawer(!drawer.classList.contains('open')));
-    document.getElementById('checkout').addEventListener('click', ()=> alert('Checkout simulado. Gracias por visitar el Parque 🦖'))
-
-    // Pase de visitante (email fake)
-    document.getElementById('btn-pass').addEventListener('click', ()=> document.getElementById('email').focus());
-    document.getElementById('claim').addEventListener('click', ()=>{
-      const email = document.getElementById('email').value.trim();
-      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showToast('Ingresá un email válido');
-      showToast('¡Pase activado! 10% OFF en tu compra');
+    // filtros
+    document.querySelectorAll('.filtro').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.filtro').forEach(b=>{
+          b.classList.remove('bg-green-600','text-white');
+          b.classList.add('bg-gray-700','text-gray-200');
+        });
+        btn.classList.add('bg-green-600','text-white');
+        const cat = btn.dataset.cat;
+        renderProductos(cat==='all'?productos:productos.filter(p=>p.cat===cat));
+      });
     });
 
-    // Init
-    render();
+    // buscador
+    document.getElementById('buscar').addEventListener('input',(e)=>{
+      const q = e.target.value.toLowerCase();
+      renderProductos(productos.filter(p=>p.titulo.toLowerCase().includes(q)));
+    });
+
+    renderProductos(productos);
   </script>
-  
 </body>
 </html>
