@@ -54,6 +54,7 @@
           <th class="border p-2">Activo</th>
           <th class="border p-2">Cantidad</th>
           <th class="border p-2">Valor actual (USD)</th>
+          <th class="border p-2">Vender</th>
         </tr>
       </thead>
       <tbody id="inventory-table"></tbody>
@@ -61,6 +62,7 @@
         <tr class="font-bold">
           <td class="border p-2" colspan="2">Total cartera</td>
           <td class="border p-2" id="inventory-total">0</td>
+          <td class="border p-2"></td>
         </tr>
       </tfoot>
     </table>
@@ -160,6 +162,39 @@
 
       input.value='';
       renderInventory();
+
+      // enviar compra a PHP
+      fetch('backend.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'buy',asset:name,type:type,amount:amount,cost:cost})
+      });
+    }
+
+    function sellAsset(name,type){
+      const sellAmount = parseFloat(prompt(`Cantidad a vender de ${name}:`));
+      if(isNaN(sellAmount) || sellAmount <=0) return alert('Cantidad inválida');
+
+      const item = inventory.find(i=>i.name===name);
+      if(!item || sellAmount>item.amount) return alert('No tienes suficiente cantidad');
+
+      const price = type==='crypto'? cryptoPrices[name]: stockPrices[name];
+      const gain = sellAmount*price;
+
+      balance += gain;
+      balanceEl.textContent = balance.toFixed(2);
+
+      item.amount -= sellAmount;
+      if(item.amount<=0) inventory = inventory.filter(i=>i.name!==name);
+
+      renderInventory();
+
+      // enviar venta a PHP
+      fetch('backend.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'sell',asset:name,type:type,amount:sellAmount,gain:gain})
+      });
     }
 
     function renderInventory(){
@@ -173,6 +208,7 @@
           <td class="border p-2">${item.name}</td>
           <td class="border p-2">${item.amount}</td>
           <td class="border p-2">${value.toFixed(2)}</td>
+          <td class="border p-2"><button class="bg-red-600 px-2 py-1 rounded" onclick="sellAsset('${item.name}','${item.type}')">Vender</button></td>
         </tr>`;
       });
       inventoryTotalEl.textContent = total.toFixed(2);
@@ -200,7 +236,6 @@
 
     renderTables();
     setInterval(updatePrices,2000);
-
   </script>
 </body>
 </html>
