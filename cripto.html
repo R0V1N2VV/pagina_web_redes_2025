@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Exchange Cripto & Bolsa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-8 text-center text-green-400">Simulador de Inversión</h1>
+
+    <!-- Wallet -->
+    <div class="mb-12 p-6 bg-gray-800 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Mi Billetera</h2>
+      <p class="mb-2">USD disponible: <span id="usdBalance" class="font-bold text-green-400">$10000.00</span></p>
+      <ul id="wallet" class="space-y-2"></ul>
+    </div>
+
+    <!-- Criptos -->
+    <h2 class="text-2xl font-bold mb-4 text-center text-yellow-400">Criptomonedas</h2>
+    <div id="cryptos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"></div>
+    <div class="mt-12 p-6 bg-gray-800 rounded-2xl shadow-lg">
+      <h3 class="text-xl font-bold mb-4">Evolución Cripto</h3>
+      <canvas id="chartCrypto"></canvas>
+    </div>
+
+    <!-- Bolsa -->
+    <h2 class="text-2xl font-bold mt-16 mb-4 text-center text-blue-400">Bolsa (Acciones)</h2>
+    <div id="stocks" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"></div>
+    <div class="mt-12 p-6 bg-gray-800 rounded-2xl shadow-lg">
+      <h3 class="text-xl font-bold mb-4">Evolución Bolsa</h3>
+      <canvas id="chartStocks"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let usdBalance = 10000;
+
+    // ---------------- CRIPTOS ----------------
+    const cryptos = [
+      {id:1, nombre:'Bitcoin', simbolo:'BTC', precio:65000, color:'orange', balance:0},
+      {id:2, nombre:'Ethereum', simbolo:'ETH', precio:3500, color:'purple', balance:0},
+      {id:3, nombre:'Cardano', simbolo:'ADA', precio:0.45, color:'blue', balance:0},
+      {id:4, nombre:'Solana', simbolo:'SOL', precio:140, color:'teal', balance:0}
+    ];
+
+    let labelsCrypto = [];
+    let datasetsCrypto = cryptos.map(c=>({
+      label: c.simbolo,
+      data: [],
+      borderColor: c.color,
+      fill: false,
+      tension: 0.3
+    }));
+
+    const chartCrypto = new Chart(document.getElementById('chartCrypto'),{
+      type:'line',
+      data:{labels:labelsCrypto,datasets:datasetsCrypto},
+      options:{scales:{y:{ticks:{callback:(val)=>"$"+val}}}}
+    });
+
+    // ---------------- ACCIONES ----------------
+    const stocks = [
+      {id:101, nombre:'Apple', simbolo:'AAPL', precio:190, color:'red', balance:0},
+      {id:102, nombre:'Tesla', simbolo:'TSLA', precio:250, color:'cyan', balance:0},
+      {id:103, nombre:'Amazon', simbolo:'AMZN', precio:130, color:'yellow', balance:0},
+      {id:104, nombre:'Microsoft', simbolo:'MSFT', precio:330, color:'lime', balance:0}
+    ];
+
+    let labelsStocks = [];
+    let datasetsStocks = stocks.map(s=>({
+      label: s.simbolo,
+      data: [],
+      borderColor: s.color,
+      fill: false,
+      tension: 0.3
+    }));
+
+    const chartStocks = new Chart(document.getElementById('chartStocks'),{
+      type:'line',
+      data:{labels:labelsStocks,datasets:datasetsStocks},
+      options:{scales:{y:{ticks:{callback:(val)=>"$"+val}}}}
+    });
+
+    // ---------------- RENDER ----------------
+    function renderAssets(list, containerId, type){
+      const cont = document.getElementById(containerId);
+      cont.innerHTML = '';
+      list.forEach(a=>{
+        cont.innerHTML += `
+          <div class="bg-gray-800 p-5 rounded-2xl shadow-lg hover:scale-105 transition-transform">
+            <h3 class="font-bold text-lg mb-1">${a.nombre} (${a.simbolo})</h3>
+            <p class="mt-2 font-bold text-green-400">$${a.precio.toFixed(2)}</p>
+            <p class="text-sm text-gray-400">Balance: ${a.balance.toFixed(8)} ${a.simbolo}</p>
+            <div class="flex gap-2 mt-4">
+              <input id="input-${type}-${a.id}" type="number" step="0.00000001" min="0" placeholder="Cantidad"
+                class="w-24 px-2 py-1 rounded-lg text-black text-sm">
+              <button onclick="buyAsset('${type}',${a.id})" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-2xl">Comprar</button>
+              <button onclick="sellAsset('${type}',${a.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-2xl">Vender</button>
+            </div>
+          </div>`;
+      });
+    }
+
+    function renderWallet(){
+      document.getElementById('usdBalance').textContent = "$" + usdBalance.toFixed(2);
+      const ul = document.getElementById('wallet');
+      ul.innerHTML = '';
+      [...cryptos, ...stocks].forEach(a=>{
+        if(a.balance > 0){
+          ul.innerHTML += `<li>${a.simbolo}: ${a.balance.toFixed(8)}</li>`;
+        }
+      });
+    }
+
+    // ---------------- COMPRAR/VENDER ----------------
+    function buyAsset(type,id){
+      const list = type==="crypto"?cryptos:stocks;
+      const a = list.find(x=>x.id===id);
+      const input = document.getElementById(`input-${type}-${id}`);
+      const amount = parseFloat(input.value);
+
+      if(isNaN(amount) || amount<=0) return alert("Ingrese cantidad válida");
+      const costUSD = amount * a.precio;
+      if(usdBalance >= costUSD){
+        a.balance += amount;
+        usdBalance -= costUSD;
+        renderAssets(list,type==="crypto"?"cryptos":"stocks",type);
+        renderWallet();
+      }else{
+        alert("Fondos insuficientes");
+      }
+      input.value='';
+    }
+
+    function sellAsset(type,id){
+      const list = type==="crypto"?cryptos:stocks;
+      const a = list.find(x=>x.id===id);
+      const input = document.getElementById(`input-${type}-${id}`);
+      const amount = parseFloat(input.value);
+
+      if(isNaN(amount) || amount<=0) return alert("Ingrese cantidad válida");
+      if(a.balance >= amount){
+        const gainUSD = amount * a.precio;
+        a.balance -= amount;
+        usdBalance += gainUSD;
+        renderAssets(list,type==="crypto"?"cryptos":"stocks",type);
+        renderWallet();
+      }else{
+        alert("No tienes suficiente " + a.simbolo);
+      }
+      input.value='';
+    }
+
+    // ---------------- SIMULACIÓN PRECIOS ----------------
+    function updatePrices(){
+      const now = new Date().toLocaleTimeString();
+
+      // Criptos
+      labelsCrypto.push(now); if(labelsCrypto.length>15) labelsCrypto.shift();
+      cryptos.forEach((c,i)=>{
+        c.precio += (Math.random()-0.5)*(c.precio*0.05);
+        if(c.precio<0.01) c.precio=0.01;
+        datasetsCrypto[i].data.push(c.precio.toFixed(2));
+        if(datasetsCrypto[i].data.length>15) datasetsCrypto[i].data.shift();
+      });
+      renderAssets(cryptos,"cryptos","crypto");
+      chartCrypto.update();
+
+      // Acciones
+      labelsStocks.push(now); if(labelsStocks.length>15) labelsStocks.shift();
+      stocks.forEach((s,i)=>{
+        s.precio += (Math.random()-0.5)*(s.precio*0.02); // menos volátil
+        if(s.precio<1) s.precio=1;
+        datasetsStocks[i].data.push(s.precio.toFixed(2));
+        if(datasetsStocks[i].data.length>15) datasetsStocks[i].data.shift();
+      });
+      renderAssets(stocks,"stocks","stock");
+      chartStocks.update();
+
+      renderWallet();
+    }
+
+    renderAssets(cryptos,"cryptos","crypto");
+    renderAssets(stocks,"stocks","stock");
+    renderWallet();
+    setInterval(updatePrices,3000);
+  </script>
+</body>
+</html>

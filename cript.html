@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador Cripto & Bolsa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+  <h1 class="text-3xl font-bold mb-4 text-center">Simulador de Inversiones</h1>
+  <p class="text-center mb-6">Balance disponible: $<span id="balance">10000</span></p>
+
+  <!-- Pestañas -->
+  <div class="flex justify-center space-x-4 mb-6">
+    <button onclick="showTab('crypto')" class="tab-btn px-4 py-2 rounded bg-green-600">Criptomonedas</button>
+    <button onclick="showTab('stocks')" class="tab-btn px-4 py-2 rounded bg-gray-700">Bolsa</button>
+    <button onclick="showTab('inventory')" class="tab-btn px-4 py-2 rounded bg-gray-700">Inventario</button>
+  </div>
+
+  <!-- Contenedores de pestañas -->
+  <div id="crypto-tab">
+    <h2 class="text-2xl mb-4">Criptomonedas</h2>
+    <table class="table-auto w-full border-collapse border border-gray-600 mb-4">
+      <thead>
+        <tr>
+          <th class="border p-2">Cripto</th>
+          <th class="border p-2">Precio (USD)</th>
+          <th class="border p-2">Comprar</th>
+        </tr>
+      </thead>
+      <tbody id="crypto-table"></tbody>
+    </table>
+  </div>
+
+  <div id="stocks-tab" class="hidden">
+    <h2 class="text-2xl mb-4">Bolsa</h2>
+    <table class="table-auto w-full border-collapse border border-gray-600 mb-4">
+      <thead>
+        <tr>
+          <th class="border p-2">Acción</th>
+          <th class="border p-2">Precio (USD)</th>
+          <th class="border p-2">Comprar</th>
+        </tr>
+      </thead>
+      <tbody id="stocks-table"></tbody>
+    </table>
+  </div>
+
+  <div id="inventory-tab" class="hidden">
+    <h2 class="text-2xl mb-4">Inventario</h2>
+    <table class="table-auto w-full border-collapse border border-gray-600">
+      <thead>
+        <tr>
+          <th class="border p-2">Activo</th>
+          <th class="border p-2">Cantidad</th>
+          <th class="border p-2">Valor actual (USD)</th>
+        </tr>
+      </thead>
+      <tbody id="inventory-table"></tbody>
+      <tfoot>
+        <tr class="font-bold">
+          <td class="border p-2" colspan="2">Total cartera</td>
+          <td class="border p-2" id="inventory-total">0</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <canvas id="chart" class="mt-6 bg-gray-800 p-4 rounded" height="300"></canvas>
+
+  <script>
+    let balance = 10000;
+    let cryptoPrices = { Bitcoin: 50000, Ethereum: 3000, Dogecoin: 0.1 };
+    let stockPrices = { Tesla: 200, Apple: 150, Amazon: 3500 };
+    let inventory = [];
+
+    const cryptoTable = document.getElementById('crypto-table');
+    const stocksTable = document.getElementById('stocks-table');
+    const inventoryTable = document.getElementById('inventory-table');
+    const inventoryTotalEl = document.getElementById('inventory-total');
+    const balanceEl = document.getElementById('balance');
+
+    let chart = new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          { label: 'Bitcoin', data: [], borderColor: '#f2a900', fill:false },
+          { label: 'Ethereum', data: [], borderColor: '#3c3c3d', fill:false },
+          { label: 'Dogecoin', data: [], borderColor: '#ba9f33', fill:false },
+          { label: 'Tesla', data: [], borderColor: '#cc0000', fill:false },
+          { label: 'Apple', data: [], borderColor: '#22c55e', fill:false },
+          { label: 'Amazon', data: [], borderColor: '#6366f1', fill:false }
+        ]
+      },
+      options: { responsive:true, animation:false, scales:{ y:{ beginAtZero:false } } }
+    });
+
+    function showTab(tab) {
+      document.getElementById('crypto-tab').classList.add('hidden');
+      document.getElementById('stocks-tab').classList.add('hidden');
+      document.getElementById('inventory-tab').classList.add('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.replace('bg-green-600','bg-gray-700'));
+      
+      if(tab==='crypto'){
+        document.getElementById('crypto-tab').classList.remove('hidden');
+        document.querySelector('.tab-btn:nth-child(1)').classList.replace('bg-gray-700','bg-green-600');
+      }
+      if(tab==='stocks'){
+        document.getElementById('stocks-tab').classList.remove('hidden');
+        document.querySelector('.tab-btn:nth-child(2)').classList.replace('bg-gray-700','bg-green-600');
+      }
+      if(tab==='inventory'){
+        document.getElementById('inventory-tab').classList.remove('hidden');
+        document.querySelector('.tab-btn:nth-child(3)').classList.replace('bg-gray-700','bg-green-600');
+      }
+    }
+
+    function renderTables() {
+      cryptoTable.innerHTML = '';
+      Object.entries(cryptoPrices).forEach(([name, price]) => {
+        cryptoTable.innerHTML += `<tr>
+          <td class="border p-2">${name}</td>
+          <td class="border p-2">${price.toFixed(6)}</td>
+          <td class="border p-2"><input type="number" step="any" min="0" id="buy-${name}" class="text-black p-1 rounded mr-2"><button class="bg-green-600 px-2 py-1 rounded" onclick="buyAsset('${name}','crypto')">Comprar</button></td>
+        </tr>`;
+      });
+
+      stocksTable.innerHTML = '';
+      Object.entries(stockPrices).forEach(([name, price]) => {
+        stocksTable.innerHTML += `<tr>
+          <td class="border p-2">${name}</td>
+          <td class="border p-2">${price.toFixed(2)}</td>
+          <td class="border p-2"><input type="number" step="any" min="0" id="buy-${name}" class="text-black p-1 rounded mr-2"><button class="bg-green-600 px-2 py-1 rounded" onclick="buyAsset('${name}','stock')">Comprar</button></td>
+        </tr>`;
+      });
+
+      renderInventory();
+    }
+
+    function buyAsset(name,type){
+      const input = document.getElementById('buy-'+name);
+      const amount = parseFloat(input.value);
+      if(isNaN(amount) || amount <=0) return alert('Cantidad inválida');
+
+      const price = type==='crypto'? cryptoPrices[name]: stockPrices[name];
+      const cost = amount*price;
+      if(cost>balance) return alert('Fondos insuficientes');
+
+      balance -= cost;
+      balanceEl.textContent = balance.toFixed(2);
+
+      let existing = inventory.find(i=>i.name===name);
+      if(existing){
+        existing.amount += amount;
+      } else {
+        inventory.push({name:name,amount:amount,type:type});
+      }
+
+      input.value='';
+      renderInventory();
+    }
+
+    function renderInventory(){
+      inventoryTable.innerHTML='';
+      let total=0;
+      inventory.forEach(item=>{
+        const price = item.type==='crypto'? cryptoPrices[item.name]: stockPrices[item.name];
+        const value = price*item.amount;
+        total += value;
+        inventoryTable.innerHTML += `<tr>
+          <td class="border p-2">${item.name}</td>
+          <td class="border p-2">${item.amount}</td>
+          <td class="border p-2">${value.toFixed(2)}</td>
+        </tr>`;
+      });
+      inventoryTotalEl.textContent = total.toFixed(2);
+    }
+
+    function updatePrices(){
+      Object.keys(cryptoPrices).forEach(k=>{
+        cryptoPrices[k] = +(cryptoPrices[k]*(1+(Math.random()-0.5)*0.05)).toFixed(6);
+      });
+      Object.keys(stockPrices).forEach(k=>{
+        stockPrices[k] = +(stockPrices[k]*(1+(Math.random()-0.5)*0.03)).toFixed(2);
+      });
+
+      // actualizar gráfico
+      const now = new Date().toLocaleTimeString();
+      chart.data.labels.push(now);
+      if(chart.data.labels.length>20) chart.data.labels.shift();
+      chart.data.datasets.forEach(ds=>{
+        ds.data.push(ds.label in cryptoPrices? cryptoPrices[ds.label]: stockPrices[ds.label]);
+        if(ds.data.length>20) ds.data.shift();
+      });
+      chart.update();
+      renderTables();
+    }
+
+    renderTables();
+    setInterval(updatePrices,2000);
+
+  </script>
+</body>
+</html>
