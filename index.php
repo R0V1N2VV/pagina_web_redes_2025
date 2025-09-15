@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,16 +13,24 @@
   <nav class="bg-gray-800 fixed w-full top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-green-400">Cripto Sim</h1>
-      <div class="space-x-3">
+      <div class="flex items-center space-x-3">
         <a href="#activos" class="bg-purple-600 px-4 py-2 rounded shadow-lg hover:bg-purple-500 transition">Criptomonedas</a>
         <a href="#bolsa" class="bg-yellow-600 px-4 py-2 rounded shadow-lg hover:bg-yellow-500 transition">Bolsa</a>
         <a href="#billetera" class="bg-blue-600 px-4 py-2 rounded shadow-lg hover:bg-blue-500 transition">Billetera</a>
-        <!-- Botón para abrir nueva página de Bolsa -->
-      <button onclick="window.location.href='ComoInvertir.php'" 
-  class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-semibold">
-  Cómo Invertir
-</button>
+        <button onclick="window.location.href='ComoInvertir.php'" 
+          class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-semibold">
+          Cómo Invertir
+        </button>
 
+        <!-- Menú de usuario -->
+        <?php if(isset($_SESSION['usuario'])): ?>
+          <span class="text-yellow-400 ml-4 mr-2">👋 Hola, <?php echo $_SESSION['usuario']['nombre']; ?></span>
+          <a href="usuario.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">👤 Mi cuenta</a>
+          <a href="logout.php" class="bg-red-600 px-3 py-2 rounded hover:bg-red-500 transition">🚪 Cerrar sesión</a>
+        <?php else: ?>
+          <a href="login.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">🔑 Iniciar sesión</a>
+          <a href="registro.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">📝 Registrarse</a>
+        <?php endif; ?>
       </div>
     </div>
   </nav>
@@ -80,7 +89,6 @@
     function render(){
       document.getElementById("usd").textContent = "$"+usd.toFixed(2);
 
-      // Render cripto
       const criptoList = document.getElementById("cripto-list");
       criptoList.innerHTML = "";
       criptos.forEach(a=>{
@@ -89,14 +97,12 @@
             <b>${a.nombre} (${a.simbolo})</b><br>
             Precio: $${a.precio.toFixed(2)}<br>
             Balance: ${a.balance.toFixed(4)}<br>
-            <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad"
-              class="text-black px-1 w-24">
+            <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad" class="text-black px-1 w-24">
             <button onclick="trade('${a.simbolo}','buy')" class="bg-green-600 px-2 py-1 rounded shadow hover:bg-green-500 transition">Comprar</button>
             <button onclick="trade('${a.simbolo}','sell')" class="bg-red-600 px-2 py-1 rounded shadow hover:bg-red-500 transition">Vender</button>
           </div>`;
       });
 
-   
       const bolsaList = document.getElementById("bolsa-list");
       bolsaList.innerHTML = "";
       acciones.forEach(a=>{
@@ -105,14 +111,12 @@
             <b>${a.nombre} (${a.simbolo})</b><br>
             Precio: $${a.precio.toFixed(2)}<br>
             Balance: ${a.balance.toFixed(4)}<br>
-            <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad"
-              class="text-black px-1 w-24">
+            <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad" class="text-black px-1 w-24">
             <button onclick="trade('${a.simbolo}','buy')" class="bg-green-600 px-2 py-1 rounded shadow hover:bg-green-500 transition">Comprar</button>
             <button onclick="trade('${a.simbolo}','sell')" class="bg-red-600 px-2 py-1 rounded shadow hover:bg-red-500 transition">Vender</button>
           </div>`;
       });
 
-    
       const wallet = document.getElementById("wallet");
       wallet.innerHTML = "";
       [...criptos,...acciones].forEach(a=>{
@@ -131,11 +135,6 @@
       }
     }
 
-    function abrirBolsaDetalle() {
-      window.location.href = "bolsa.html"; 
-    }
-
- 
     setInterval(()=>{
       [...criptos,...acciones].forEach(a=>{
         a.precio += (Math.random()-0.5)*a.precio*0.05;
