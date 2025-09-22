@@ -5,7 +5,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = ""; // contraseña por defecto de XAMPP
-$dbname = "criptosim"; // cambia por tu nombre de base de datos
+$dbname = "cripto_db"; // cambia por tu nombre de base de datos
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

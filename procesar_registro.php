@@ -46,76 +46,35 @@ $conn->close();
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Resultado Registro | Cripto</title>
+  <title>Resultado Registro | CriptoSim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="favicon.png" type="image/png">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-      color: #f1f1f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .mensaje {
-      background: #141414;
-      border: 2px solid #ffd700;
-      border-radius: 15px;
-      padding: 30px;
-      width: 400px;
-      text-align: center;
-      box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.4);
-      animation: fadeIn 0.8s ease-in-out;
-    }
-    .mensaje h2 {
-      color: #ffd700;
-      text-shadow: 0 0 8px #ffd700;
-    }
-    .mensaje p {
-      font-size: 16px;
-      margin-top: 15px;
-    }
-    .exito p {
-      color: #00ff88;
-    }
-    .error p {
-      color: #ff4444;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #ffd700;
-      color: #000;
-      border-radius: 8px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .btn:hover {
-      background: #ffcc00;
-      transform: scale(1.05);
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    .btc-logo {
-      width: 60px;
-      margin-bottom: 15px;
-    }
-  </style>
 </head>
-<body>
-  <div class="mensaje <?php echo $tipo; ?>">
-    <img src="favicon.png" alt="Bitcoin" class="btc-logo">
-    <h2><?php echo ($tipo == "exito") ? "¡Registro Exitoso!" : "Ocurrió un problema"; ?></h2>
-    <p><?php echo $resultado; ?></p>
-    <a href="index.php" class="btn"> Ir al inicio</a>
-    <br><br>
-    <a href="registro.php" class="btn"> Volver a registro</a>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen text-gray-100">
+
+  <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+    <img src="favicon.png" alt="Bitcoin" class="mx-auto w-16 mb-4">
+
+    <h2 class="text-2xl font-bold mb-4 
+        <?php echo ($tipo == 'exito') ? 'text-green-400' : 'text-red-400'; ?>">
+        <?php echo ($tipo == "exito") ? "¡Registro Exitoso!" : "Ocurrió un problema"; ?>
+    </h2>
+
+    <p class="mb-6 <?php echo ($tipo == 'exito') ? 'text-green-300' : 'text-red-300'; ?>">
+      <?php echo $resultado; ?>
+    </p>
+
+    <div class="space-y-3">
+      <a href="index.php" 
+         class="block w-full bg-green-500 hover:bg-green-600 px-4 py-2 rounded font-semibold transition">
+         Ir al inicio
+      </a>
+      <a href="registro.php" 
+         class="block w-full bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded font-semibold transition">
+         Volver a registro
+      </a>
+    </div>
   </div>
+
 </body>
 </html>

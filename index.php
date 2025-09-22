@@ -25,7 +25,7 @@
         <!-- Menú de usuario -->
         <?php if(isset($_SESSION['usuario'])): ?>
           <span class="text-yellow-400 ml-4 mr-2">👋 Hola, <?php echo $_SESSION['usuario']['nombre']; ?></span>
-          <a href="usuario.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">👤 Mi cuenta</a>
+          <a href="mi_cuenta.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">👤 Mi cuenta</a>
           <a href="logout.php" class="bg-red-600 px-3 py-2 rounded hover:bg-red-500 transition">🚪 Cerrar sesión</a>
         <?php else: ?>
           <a href="login.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">🔑 Iniciar sesión</a>
