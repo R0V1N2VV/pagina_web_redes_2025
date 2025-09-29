@@ -1,0 +1,15 @@
+2025-09-29T20:56:12+02:00 {"moneda":"ETH","cantidad":"1","precio":"3500"}
+Procesado: moneda=ETH, cantidad=1, precio=3500
+2025-09-29T20:56:19+02:00 {"moneda":"ETH","cantidad":"3","precio":"3509.7955483100027"}
+Procesado: moneda=ETH, cantidad=3, precio=3509.79554831
+2025-09-29T20:56:50+02:00 {"moneda":"XRP","cantidad":"9","precio":"1.1677897401286084"}
+Procesado: moneda=XRP, cantidad=9, precio=1.1677897401286
+2025-09-29T20:56:53+02:00 {"moneda":"LTC","cantidad":"4","precio":"183.01116769991745"}
+Procesado: moneda=LTC, cantidad=4, precio=183.01116769992
+2025-09-29T20:56:59+02:00 {"moneda":"MSFT","cantidad":"1.2","precio":"319.76244105866215"}
+Procesado: moneda=MSFT, cantidad=1.2, precio=319.76244105866
+2025-09-29T20:57:04+02:00 {"moneda":"MSFT","cantidad":"0.02","precio":"319.6517224732602"}
+Procesado: moneda=MSFT, cantidad=0.02, precio=319.65172247326
+2025-09-29T20:57:57+02:00 {"moneda":"ETH","cantidad":"1","precio":"3347.1888752946998"}
+2025-09-29T21:02:15+02:00 {"moneda":"ETH","cantidad":"1","precio":"3631.1502092135493"}
+Procesado: moneda=ETH, cantidad=1, precio=3631.1502092135
