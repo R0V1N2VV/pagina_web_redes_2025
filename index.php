@@ -13,6 +13,11 @@
   <nav class="bg-gray-800 fixed w-full top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-green-400">Cripto Sim</h1>
+      <!-- Dentro del <nav> ... donde están los botones -->
+<span class="hidden sm:inline text-xs bg-gray-700 px-2 py-1 rounded ml-2">
+  Saldo: <b class="text-green-400" id="saldoNavbar" data-saldo>$0.00</b>
+</span>
+
       <div class="flex items-center space-x-3">
         <a href="#activos" class="bg-purple-600 px-4 py-2 rounded shadow-lg hover:bg-purple-500 transition">Criptomonedas</a>
         <a href="#bolsa" class="bg-yellow-600 px-4 py-2 rounded shadow-lg hover:bg-yellow-500 transition">Bolsa</a>
