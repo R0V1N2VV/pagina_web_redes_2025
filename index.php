@@ -13,10 +13,7 @@
   <nav class="bg-gray-800 fixed w-full top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-green-400">Cripto Sim</h1>
-      <!-- Dentro del <nav> ... donde están los botones -->
-<span class="hidden sm:inline text-xs bg-gray-700 px-2 py-1 rounded ml-2">
-  Saldo: <b class="text-green-400" id="saldoNavbar" data-saldo>$0.00</b>
-</span>
+
 
       <div class="flex items-center space-x-3">
         <a href="#activos" class="bg-purple-600 px-4 py-2 rounded shadow-lg hover:bg-purple-500 transition">Criptomonedas</a>
@@ -234,6 +231,26 @@ setInterval(()=>{
 
 // Render inicial
 cargarBilleteraYRenderizar();
+</script>
+<script>
+  function cargarSaldoDesdeBD() {
+    fetch('api_billetera.php', { credentials: 'same-origin' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.saldo !== undefined) {
+          const saldo = data.saldo;
+          document.getElementById("usd").textContent = "$" + saldo.toFixed(2); // Actualiza el saldo en el cuerpo
+        } else {
+          console.error("Error al obtener el saldo:", data);
+        }
+      })
+      .catch(error => {
+        console.error("Error al conectar con el servidor:", error);
+      });
+  }
+
+  // Llama a la función al cargar la página
+  cargarSaldoDesdeBD();
 </script>
 </body>
 </html>

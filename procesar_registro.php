@@ -86,16 +86,4 @@ $conn->close();
 </body>
 </html>
  
-  </style>
-</head>
-<body>
-  <div class="mensaje <?php echo $tipo; ?>">
-    <img src="favicon.png" alt="Bitcoin" class="btc-logo">
-    <h2><?php echo ($tipo == "exito") ? "¡Registro Exitoso!" : "Ocurrió un problema"; ?></h2>
-    <p><?php echo $resultado; ?></p>
-    <a href="index.php" class="btn"> Ir al inicio</a>
-    <br><br>
-    <a href="registro.php" class="btn"> Volver a registro</a>
-  </div>
-</body>
-</html>
+  
