@@ -1,256 +1,217 @@
 <?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Cripto Sim</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="UTF-8">
+    <title>Cripto Sim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+        .green-button {
+            background-color: #10B981; /* green-500 */
+            color: white;
+        }
+        .green-button:hover {
+            background-color: #059669; /* green-600 */
+        }
+        .portfolio-chart {
+            height: 8px; /* Altura de la barra de gráfico */
+        }
+        /* Para un scroll suave al usar los anclas */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 p-0 flex flex-col min-h-screen">
 
-  <!-- Navbar fijo -->
-  <nav class="bg-gray-800 fixed w-full top-0 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-green-400">Cripto Sim</h1>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+    
+   <?php include("navbar.php") ?>
 
+    
+    <main class="flex-grow pt-24 px-6 max-w-6xl mx-auto space-y-16">
 
-      <div class="flex items-center space-x-3">
-        <a href="#activos" class="bg-purple-600 px-4 py-2 rounded shadow-lg hover:bg-purple-500 transition">Criptomonedas</a>
-        <a href="#bolsa" class="bg-yellow-600 px-4 py-2 rounded shadow-lg hover:bg-yellow-500 transition">Bolsa</a>
-        <a href="#billetera" class="bg-blue-600 px-4 py-2 rounded shadow-lg hover:bg-blue-500 transition">Billetera</a>
-        <button onclick="window.location.href='ComoInvertir.php'" 
-          class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-semibold">
-          Cómo Invertir
-        </button>
+        <section class="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-8 lg:space-y-0 lg:space-x-12 pt-8">
+            
+            <div class="lg:w-2/3">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-gray-50">
+                    <span class="text-green-400">Simulador de Inversiones</span>
+                    <br>
+                    <span class="text-red-400">aprende a operar sin riesgo</span>
+                </h2>
+                <p class="text-lg text-gray-400 mb-6">
+                    Empieza con $10.000 de saldo virtual. Practica la compra/venta de Criptomonedas y Acciones de Bolsa en tiempo real. ¡El riesgo es CERO!
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#como-funciona" class="px-4 py-3 rounded-lg font-semibold transition green-button">¿Como funciona? </a>
+                    <a href="#productos-inversion" class="px-6 py-3 rounded-lg font-semibold transition bg-gray-700 text-white hover:bg-gray-600">Productos de inversión</a>
+                    <a href="#comparador" class="px-6 py-3 rounded-lg font-semibold transition bg-gray-700 text-white hover:bg-gray-600 hidden sm:inline-block">Comparador</a>
+                </div>
+            </div>
 
-        <!-- Menú de usuario -->
-        <?php if(isset($_SESSION['usuario'])): ?>
-          <span class="text-yellow-400 ml-4 mr-2">👋 Hola, <?php echo $_SESSION['usuario']['nombre']; ?></span>
-          <a href="usuario.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">👤 Mi cuenta</a>
-          <a href="logout.php" class="bg-red-600 px-3 py-2 rounded hover:bg-red-500 transition">🚪 Cerrar sesión</a>
-        <?php else: ?>
-          <a href="login.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">🔑 Iniciar sesión</a>
-          <a href="registro.php" class="bg-gray-700 px-3 py-2 rounded hover:bg-gray-600 transition">📝 Registrarse</a>
-        <?php endif; ?>
-      </div>
-    </div>
-  </nav>
+        </section>
 
-  <main class="flex-grow pt-24 px-6">
-    <!-- Dinero disponible -->
-    <p class="mb-6 text-center">
-      <span class="text-gray-400 block mb-1">USD disponible</span>
-      <span id="usd" class="text-3xl font-bold text-green-400 bg-gray-800 px-4 py-2 rounded shadow-lg inline-block">$10000.00</span>
-    </p>
+        <hr class="border-gray-700">
 
-    <!-- Sección de cripto activos -->
-    <section id="activos" class="mb-16">
-      <h2 class="text-xl font-semibold mb-2 text-purple-400">Criptomonedas</h2>
-      <div id="cripto-list" class="space-y-4"></div>
-    </section>
+        <section id="como-funciona" class="text-center">
+            <h3 class="text-3xl font-bold mb-10 text-gray-50">¿Cómo funciona?</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="p-4 bg-gray-800 rounded-lg shadow-md border-t-4 border-green-400">
+                    <div class="text-3xl mb-3">🎯</div>
+                    <h4 class="font-semibold text-green-400 mb-2">1. Define objetivos</h4>
+                    <p class="text-xs text-gray-400">Plazo, monto y tolerancia al riesgo. Es la base del plan.</p>
+                </div>
+                <div class="p-4 bg-gray-800 rounded-lg shadow-md border-t-4 border-yellow-400">
+                    <div class="text-3xl mb-3">👤</div>
+                    <h4 class="font-semibold text-yellow-400 mb-2">2. Perfil de riesgo</h4>
+                    <p class="text-xs text-gray-400">Conoce tu perfil: conservador, moderado o agresivo.</p>
+                </div>
+                <div class="p-4 bg-gray-800 rounded-lg shadow-md border-t-4 border-purple-400">
+                    <div class="text-3xl mb-3">💰</div>
+                    <h4 class="font-semibold text-purple-400 mb-2">3. Arma tu cartera</h4>
+                    <p class="text-xs text-gray-400">Diversifica entre Criptos, Bolsa o timba.</p>
+                </div>
+                <div class="p-4 bg-gray-800 rounded-lg shadow-md border-t-4 border-red-400">
+                    <div class="text-3xl mb-3">📈</div>
+                    <h4 class="font-semibold text-red-400 mb-2">4. Monitoreo</h4>
+                    <p class="text-xs text-gray-400">Rebalancea periódicamente según mercado y objetivos.</p>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="border-gray-700">
 
-    <!-- Sección de bolsa -->
-    <section id="bolsa" class="mb-16">
-      <h2 class="text-xl font-semibold mb-2 text-yellow-400">Bolsa</h2>
-      <div id="bolsa-list" class="space-y-4"></div>
-    </section>
+        <section id="productos-inversion" class="pt-8 text-center">
+            <h3 class="text-3xl font-bold mb-10 text-center text-gray-50">Productos de inversión</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto"> 
+                
+                <div class="p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 hover:border-green-400 transition-all text-left">
+                    <div class="text-3xl mb-3 text-green-400">₿</div>
+                    <h4 class="font-semibold text-xl text-green-400 mb-3">Criptomonedas</h4>
+                    <p class="text-sm text-gray-400 mb-4">Activos digitales con alta volatilidad. Potencial de crecimiento exponencial a largo plazo.</p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium">
+                        <span class="bg-gray-700 text-green-400 px-3 py-1 rounded-full">Alto riesgo</span>
+                        <span class="bg-gray-700 text-green-400 px-3 py-1 rounded-full">Volátil</span>
+                        <span class="bg-gray-700 text-green-400 px-3 py-1 rounded-full">Largo plazo</span>
+                    </div>
+                </div>
 
-    <!-- Sección de billetera -->
-    <section id="billetera">
-      <h2 class="text-xl font-semibold mb-2 text-blue-400">Billetera</h2>
-      <div id="wallet" class="space-y-2 bg-gray-800 p-3 rounded">
-        No tienes activos en la billetera.
-      </div>
-    </section>
-  </main>
+                <div class="p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 hover:border-yellow-400 transition-all text-left">
+                    <div class="text-3xl mb-3 text-yellow-400">📜</div>
+                    <h4 class="font-semibold text-xl text-yellow-400 mb-3">Bolsa</h4>
+                    <p class="text-sm text-gray-400 mb-4">Instrumentos con bajo riesgo y rendimientos fijos.</p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium">
+                        <span class="bg-gray-700 text-yellow-400 px-3 py-1 rounded-full">Cupones Periódicos</span>
+                        <span class="bg-gray-700 text-yellow-400 px-3 py-1 rounded-full">Preservación de Capital</span>
+                        <span class="bg-gray-700 text-yellow-400 px-3 py-1 rounded-full">Calificación Crediticia</span>
+                    </div>
+                </div>
+                
+                <div class="p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 relative overflow-hidden flex flex-col justify-between text-left">
+                    <div>
+                        <div class="text-3xl mb-3 text-gray-500 opacity-50">🎰</div> 
+                        <h4 class="font-semibold text-xl text-gray-500 mb-3">Timba</h4>
+                        <p class="text-sm text-gray-600 mb-4">Operaciones de alto riesgo con potencial de ganancias rápidas.</p>
+                        <div class="flex flex-wrap gap-2 text-xs font-medium opacity-50">
+                            <span class="bg-gray-700 text-gray-500 px-3 py-1 rounded-full">Alto riesgo</span>
+                            <span class="bg-gray-700 text-gray-500 px-3 py-1 rounded-full">Demasiado Volátil</span>
+                            <span class="bg-gray-700 text-gray-500 px-3 py-1 rounded-full">corto plazo</span>
+                        </div>
+                    </div>
+                    <div class="mt-auto pt-4"> 
+                        <span class="block text-xl font-bold text-red-500 bg-red-900 bg-opacity-30 px-3 py-1 rounded-full text-center">Próximamente</span>
+                    </div>
+                </div>
 
-  <footer class="bg-gray-800 text-gray-400 text-center py-4 mt-6 rounded">
-    <p>© 2025 CriptoSim | Desarrollado por Felipe Mochi </p>
-  </footer>
+            </div>
+        </section>
 
-<script>
-let usd = 10000;
+        <hr class="border-gray-700">
 
-const criptos = [
-  {nombre:"Bitcoin",simbolo:"BTC",precio:65000},
-  {nombre:"Ethereum",simbolo:"ETH",precio:3500},
-  {nombre:"Ripple",simbolo:"XRP",precio:1.2},
-  {nombre:"Litecoin",simbolo:"LTC",precio:180},
-  {nombre:"Cardano",simbolo:"ADA",precio:2.5}
-];
+        <section id="comparador" class="pb-16 pt-8">
+            <h3 class="text-3xl font-bold mb-10 text-center text-gray-50">Comparador rápido</h3>
+            <p class="text-center text-gray-400 mb-8">Una guía orientativa de riesgo, plazo sugerido, objetivo típico, liquidez y costos.</p>
 
-const acciones = [
-  {nombre:"Apple",simbolo:"AAPL",precio:190},
-  {nombre:"Google",simbolo:"GOOGL",precio:2800},
-  {nombre:"Amazon",simbolo:"AMZN",precio:3500},
-  {nombre:"Microsoft",simbolo:"MSFT",precio:330},
-  {nombre:"Tesla",simbolo:"TSLA",precio:750}
-];
+            <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-xl">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Instrumento</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Riesgo</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Plazo sugerido</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Objetivo típico</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Liquidez</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Costos</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <tr class="hover:bg-gray-700 transition">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Criptomonedas</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="bg-red-900 text-red-400 px-3 py-1 text-xs rounded-full font-semibold">Alto</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">3-5 años+</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Crecimiento capital</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Alta</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Medios-Altos</td>
+                        </tr>
+                        <tr class="hover:bg-gray-700 transition">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Bolsa</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="bg-yellow-900 text-yellow-400 px-3 py-1 text-xs rounded-full font-semibold">Medio-Alto</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">1-3 años+</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Crecimiento/Dividendos</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Media</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bajos-Medios</td>
+                        </tr>
+                        <tr class="hover:bg-gray-700 transition">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Casino</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="bg-red-900 text-red-400 px-3 py-1 text-xs rounded-full font-semibold">Muy Alto</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Día/Semana</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Ganancia rápida</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Inmediata</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Variables (Altos)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
+    </main>
 
-function render(billetera = {}) {
-  document.getElementById("usd").textContent = "$" + usd.toFixed(2);
+    <footer class="bg-gray-800 text-gray-400 mt-auto py-6">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+            &copy; 2025 Cripto Sim. Simulador de inversiones.
+        </div>
+    </footer>
 
- 
-  const criptoList = document.getElementById("cripto-list");
-  criptoList.innerHTML = "";
-  criptos.forEach(a => {
-    let bal = billetera[a.simbolo] ? parseFloat(billetera[a.simbolo]) : 0;
-    criptoList.innerHTML += `
-      <div class="bg-gray-800 p-3 rounded shadow-md">
-        <b>${a.nombre} (${a.simbolo})</b><br>
-        Precio: $${a.precio.toFixed(2)}<br>
-        Balance: ${bal.toFixed(4)}<br>
-        <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad" class="text-black px-1 w-24">
-        <button onclick="trade('${a.simbolo}','buy', this)" class="bg-green-600 px-2 py-1 rounded shadow hover:bg-green-500 transition">Comprar</button>
-        <button onclick="trade('${a.simbolo}','sell', this)" class="bg-red-600 px-2 py-1 rounded shadow hover:bg-red-500 transition">Vender</button>
-      </div>`;
-  });
-
-  
-  const bolsaList = document.getElementById("bolsa-list");
-  bolsaList.innerHTML = "";
-  acciones.forEach(a => {
-    let bal = billetera[a.simbolo] ? parseFloat(billetera[a.simbolo]) : 0;
-    bolsaList.innerHTML += `
-      <div class="bg-gray-800 p-3 rounded shadow-md">
-        <b>${a.nombre} (${a.simbolo})</b><br>
-        Precio: $${a.precio.toFixed(2)}<br>
-        Balance: ${bal.toFixed(4)}<br>
-        <input id="amt-${a.simbolo}" type="number" min="0" placeholder="Cantidad" class="text-black px-1 w-24">
-        <button onclick="trade('${a.simbolo}','buy', this)" class="bg-green-600 px-2 py-1 rounded shadow hover:bg-green-500 transition">Comprar</button>
-        <button onclick="trade('${a.simbolo}','sell', this)" class="bg-red-600 px-2 py-1 rounded shadow hover:bg-red-500 transition">Vender</button>
-      </div>`;
-  });
-
- 
-  const wallet = document.getElementById("wallet");
-  wallet.innerHTML = "";
-  let hayActivos = false;
-  Object.keys(billetera).forEach(simbolo => {
-    let total = parseFloat(billetera[simbolo]);
-    if (total > 0) {
-      hayActivos = true;
-      wallet.innerHTML += `<div>${simbolo}: ${total.toFixed(4)}</div>`;
+    <script>
+    function cargarSaldo() {
+        // Simulación de valor "YTD" ya que no hay un campo real en tu API, usando el saldo USD.
+        // Se carga el saldo real y se muestra el % simulado.
+        fetch('api_billetera.php', { credentials: 'same-origin' })
+            .then(r => r.json())
+            .then(d => {
+                if (d && typeof d.saldo !== 'undefined') {
+                    // Simulación de un porcentaje de retorno (YTD) para el dashboard
+                    const saldo = Number(d.saldo);
+                    let ytd = 0.00;
+                    if (saldo > 0) {
+                        ytd = (saldo / 100) * 12.4; // Ejemplo: 12.4% de YTD
+                    }
+                    // Aquí mostramos un valor de ejemplo estático para el YTD como en la foto
+                    document.getElementById('usd-balance').textContent = '12.4%'; 
+                }
+            })
+            .catch(()=>{
+                // Si falla la carga, muestra el valor simulado
+                document.getElementById('usd-balance').textContent = '12.4%';
+            });
     }
-  });
-  if (!hayActivos) wallet.innerHTML = "No tienes activos en la billetera.";
-}
-
-
-function cargarBilleteraYRenderizar() {
-  fetch('api_billetera.php', {credentials: 'same-origin'})
-    .then(resp => resp.ok ? resp.json() : {})
-    .then(data => {
-      let billetera = (data && data.billetera) ? data.billetera : {};
-      let saldo = (data && typeof data.saldo !== "undefined") ? data.saldo : 10000;
-      document.getElementById("usd").textContent = "$" + saldo.toFixed(2);
-      render(billetera);
-    })
-    .catch(() => {
-      document.getElementById("usd").textContent = "$10000.00";
-      render({});
-    });
-}
-
-
-function trade(simbolo, tipo, btn){
-  if (btn.disabled) return; 
-  btn.disabled = true; 
-
-  const activo = [...criptos,...acciones].find(a=>a.simbolo===simbolo);
-  const input = document.getElementById("amt-"+simbolo);
-  const amt = parseFloat(input.value);
-
-  if(amt>0){
-    if(tipo==="buy"){
-      fetch('comprar.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `moneda=${encodeURIComponent(simbolo)}&cantidad=${encodeURIComponent(amt)}&precio=${encodeURIComponent(activo.precio)}`,
-        credentials: 'same-origin'
-      })
-      .then(resp => resp.text())
-      .then(data => {
-        if(data === 'OK'){
-          alert('¡Compra realizada y guardada en la base de datos!');
-          input.value = "";
-          cargarBilleteraYRenderizar();
-        } else if(data.includes('login.php')) {
-          alert('Debes iniciar sesión para comprar.');
-          window.location.href = 'login.php';
-        } else {
-          alert('Respuesta del servidor: ' + data);
-        }
-        btn.disabled = false;
-      })
-      .catch(err => {
-        btn.disabled = false;
-        alert('Error al conectar con el servidor: '+err);
-      });
-    }
-    if(tipo==="sell"){
-      fetch('vender.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `moneda=${encodeURIComponent(simbolo)}&cantidad=${encodeURIComponent(amt)}&precio=${encodeURIComponent(activo.precio)}`,
-        credentials: 'same-origin'
-      })
-      .then(resp => resp.text())
-      .then(data => {
-        if(data === 'OK'){
-          alert('¡Venta realizada y guardada en la base de datos!');
-          input.value = "";
-          cargarBilleteraYRenderizar();
-        } else if(data.includes('login.php')) {
-          alert('Debes iniciar sesión para vender.');
-          window.location.href = 'login.php';
-        } else {
-          alert('Respuesta del servidor: ' + data);
-        }
-        btn.disabled = false;
-      })
-      .catch(err => {
-        btn.disabled = false;
-        alert('Error al conectar con el servidor: '+err);
-      });
-    }
-  } else {
-    btn.disabled = false;
-  }
-}
-// Actualiza precios y recarga billetera cada 5 segundos
-setInterval(()=>{
-  [...criptos,...acciones].forEach(a=>{
-    a.precio += (Math.random()-0.5)*a.precio*0.05;
-    if(a.precio<1) a.precio=1;
-  });
-  cargarBilleteraYRenderizar();
-},5000);
-
-// Render inicial
-cargarBilleteraYRenderizar();
-</script>
-<script>
-  function cargarSaldoDesdeBD() {
-    fetch('api_billetera.php', { credentials: 'same-origin' })
-      .then(response => response.json())
-      .then(data => {
-        if (data.saldo !== undefined) {
-          const saldo = data.saldo;
-          document.getElementById("usd").textContent = "$" + saldo.toFixed(2); // Actualiza el saldo en el cuerpo
-        } else {
-          console.error("Error al obtener el saldo:", data);
-        }
-      })
-      .catch(error => {
-        console.error("Error al conectar con el servidor:", error);
-      });
-  }
-
-  // Llama a la función al cargar la página
-  cargarSaldoDesdeBD();
-</script>
+    cargarSaldo();
+    </script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = ""; // deja vacío si tu XAMPP no tiene contraseña
-$dbname = "cripto_db"; // nombre de tu base de datos
+$password = ""; 
+$dbname = "cripto_db"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

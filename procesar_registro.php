@@ -31,7 +31,7 @@ if ($check->num_rows > 0) {
     $sql->bind_param("sss", $nombre, $email, $pass);
 
     if ($sql->execute()) {
-        $resultado = "✅ Registro exitoso, bienvenido a la comunidad cripto 🚀";
+        $resultado = " Registro exitoso, bienvenido a la comunidad cripto ";
         $tipo = "exito";
     } else {
         $resultado = "❌ Error al registrar: " . $sql->error;
@@ -58,8 +58,8 @@ $conn->close();
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-green-400">Cripto Sim</h1>
       <div class="flex items-center space-x-3">
-        <a href="index.php" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-semibold">🏠 Inicio</a>
-        <a href="registro.php" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white font-semibold">📝 Registrarse</a>
+        <a href="index.php" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white font-semibold"> Inicio</a>
+        <a href="login.php" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white font-semibold">iniciar sesion</a>
       </div>
     </div>
   </nav>
@@ -75,7 +75,7 @@ $conn->close();
       </p>
       <div class="space-y-3">
         <a href="index.php" class="block w-full bg-green-500 hover:bg-green-600 px-4 py-2 rounded font-semibold transition">Ir al inicio</a>
-        <a href="registro.php" class="block w-full bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded font-semibold transition">Volver a registro</a>
+        <a href="login.php" class="block w-full bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded font-semibold transition">Iniciar sesion</a>
       </div>
     </div>
   </main>
